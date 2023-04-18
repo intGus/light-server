@@ -1,14 +1,16 @@
 {
   "name": "light-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Express server for controlling TP-Link smart devices",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "intGus",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "tplink-lightbulb": "^1.7.10"
   }
 }

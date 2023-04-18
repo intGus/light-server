@@ -1,26 +1,20 @@
-const express = require('express')
-const {spawn} = require('child_process');
+import express from 'express'
+import TPLSmartDevice from 'tplink-lightbulb'
+
 const app = express()
 const port = 3000
 app.get('/', (req, res) => {
  
- var dataToSend;
- let command = req.query.command
+  let { command, hue, saturation } = req.query
+  command = (command === '1')
 
- const python = spawn('python3', ['light-control.py', '--target', '192.168.1.209', '-c', command]);
+  const light = new TPLSmartDevice('192.168.1.121')
+  light.power(command, 0, {"hue":parseInt(hue),"saturation":parseInt(saturation),"color_temp":0,"brightness":40})
+    .then(status => {
+      res.send(status)
+    })
+    .catch(err => res.send(err))
 
- // collect data from script
- python.stdout.on('data', function (data) {
-  dataToSend = data.toString();
- });
- python.stderr.on('data', function (data) {
-  dataToSend = data.toString();
- });
-
- python.on('close', (code) => {
- // send data to browser
- res.send(dataToSend)
- });
- 
 })
+
 app.listen(port, () => console.log(`Listening on port ${port}!`))
